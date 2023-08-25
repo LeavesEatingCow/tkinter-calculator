@@ -26,8 +26,8 @@ class Calculator:
         self.window.resizable(0, 0)
         self.window.title("Calculator")
 
-        self.total_expression = "0"
-        self.current_expression = "0"
+        self.total_expression = ""
+        self.current_expression = ""
 
         self.display_frame = self.create_display_frame()
 
@@ -85,29 +85,50 @@ class Calculator:
 
         return frame
 
+    def add_to_expression(self, value):
+        self.current_expression += str(value)
+        self.update_label()
+
     def create_digit_buttons(self):
         # Place buttons in button frame
         # Text is the digit
         # Value of self.digits is the row, column placement
         # Buttons fill up every side and fills up grid with sticky argument NSEW
         # Removed borders
+        # Command parameter needs a function hence using lambda was essential
+        # Binding the digit to x helps the command to display the correct value in the label
         for digit, grid_value in self.digits.items():
             button = tk.Button(self.button_frame, text=str(digit), bg=WHITE, fg=LABEL_COLOR, font=DIGITS_FONT_STYLE,
-                               borderwidth=0)
+                               borderwidth=0, command=lambda x=digit: self.add_to_expression(x))
             button.grid(row=grid_value[0], column=grid_value[1], sticky=tk.NSEW)
+
+    def append_operator(self, operator):
+        # Appends operator to current expression, adds that to total expression, then clears current expression
+        # Both total and current expression labels are updated
+        self.current_expression += operator
+        self.total_expression += self.current_expression
+        self.current_expression = ""
+        self.update_total_label()
+        self.update_label()
 
     def create_operator_buttons(self):
         i = 0
         for operator, symbol in self.operations.items():
             button = tk.Button(self.button_frame, text=symbol, bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
-                               borderwidth=0)
+                               borderwidth=0, command=lambda x=operator: self.append_operator(x))
             button.grid(row=i, column=4, sticky=tk.NSEW)
             i += 1
+
+    def clear(self):
+        self.current_expression = ""
+        self.total_expression = ""
+        self.update_label()
+        self.update_total_label()
 
     def create_clear_button(self):
         # Column span determines how many spaces in a row the button can take in a row
         button = tk.Button(self.button_frame, text="C", bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
-                           borderwidth=0)
+                           borderwidth=0, command=self.clear)
         button.grid(row=0, column=1, columnspan=3, sticky=tk.NSEW)
 
     def create_equals_button(self):
@@ -119,6 +140,12 @@ class Calculator:
         frame = tk.Frame(self.window)
         frame.pack(expand=True, fill="both")
         return frame
+
+    def update_total_label(self):
+        self.total_label.config(text=self.total_expression)
+
+    def update_label(self):
+        self.label.config(text=self.current_expression)
 
     # Run the app
     def run(self):
