@@ -157,11 +157,14 @@ class Calculator:
         # Hence it'll show the previous evaluate and the operations done unto that
         self.total_expression += self.current_expression
         self.update_total_label()
+        try:
+            self.current_expression = str(eval(self.total_expression))
 
-        self.current_expression = str(eval(self.total_expression))
-
-        self.total_expression = ""
-        self.update_label()
+            self.total_expression = ""
+        except Exception as e:
+            self.current_expression = "Error"
+        finally:
+            self.update_label()
 
     def create_equals_button(self):
         # Column span determines how many spaces in a row the button can take in a row
