@@ -181,7 +181,8 @@ class Calculator:
         self.total_label.config(text=expression)
 
     def update_label(self):
-        self.label.config(text=self.current_expression)
+        # Truncate label to hold only 11 characters
+        self.label.config(text=self.current_expression[:11])
 
     # Run the app
     def run(self):
