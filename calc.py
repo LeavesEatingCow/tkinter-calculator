@@ -131,9 +131,22 @@ class Calculator:
                            borderwidth=0, command=self.clear)
         button.grid(row=0, column=1, columnspan=3, sticky=tk.NSEW)
 
+    def evaluate(self):
+        # Adds current expression to the total expression
+        # Evaluates current expression and updates it
+        # Clears total expression so that is updates for the next evaluation
+        # Hence it'll show the previous evaluate and the operations done unto that
+        self.total_expression += self.current_expression
+        self.update_total_label()
+
+        self.current_expression = str(eval(self.total_expression))
+
+        self.total_expression = ""
+        self.update_label()
+
     def create_equals_button(self):
         button = tk.Button(self.button_frame, text="=", bg=LIGHT_BLUE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
-                           borderwidth=0)
+                           borderwidth=0, command=self.evaluate)
         button.grid(row=4, column=3, columnspan=2, sticky=tk.NSEW)
 
     def create_buttons_frame(self):
