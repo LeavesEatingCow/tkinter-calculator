@@ -7,6 +7,7 @@ DEFAULT_FONT_STYLE = ("Arial", 20)
 
 OFF_WHITE = "#F8FAFF"
 WHITE = "#FFFFFF"
+LIGHT_BLUE = "#CCEDFF"
 LIGHT_GRAY = "#F5F5F5"
 LABEL_COLOR = "#25265E"
 
@@ -42,8 +43,19 @@ class Calculator:
         self.operations = {"/": "\u00F7", "*": "\u00D7", "-": "-", "+": "+"}
 
         self.button_frame = self.create_buttons_frame()
+
+        # This fills up buttons to fit entire frame
+        self.button_frame.rowconfigure(0, weight=1)
+        for x in range(1, 5):
+            self.button_frame.rowconfigure(x, weight=1)
+            self.button_frame.columnconfigure(x, weight=1)
         self.create_digit_buttons()
         self.create_operator_buttons()
+        self.create_specials_buttons()
+
+    def create_specials_buttons(self):
+        self.create_clear_button()
+        self.create_equals_button()
 
     def create_display_labels(self):
         # Creates a total label and puts it on the display frame
@@ -91,6 +103,17 @@ class Calculator:
                                borderwidth=0)
             button.grid(row=i, column=4, sticky=tk.NSEW)
             i += 1
+
+    def create_clear_button(self):
+        # Column span determines how many spaces in a row the button can take in a row
+        button = tk.Button(self.button_frame, text="C", bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
+                           borderwidth=0)
+        button.grid(row=0, column=1, columnspan=3, sticky=tk.NSEW)
+
+    def create_equals_button(self):
+        button = tk.Button(self.button_frame, text="=", bg=LIGHT_BLUE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
+                           borderwidth=0)
+        button.grid(row=4, column=3, columnspan=2, sticky=tk.NSEW)
 
     def create_buttons_frame(self):
         frame = tk.Frame(self.window)
