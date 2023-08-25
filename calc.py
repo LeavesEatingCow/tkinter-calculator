@@ -56,6 +56,8 @@ class Calculator:
     def create_specials_buttons(self):
         self.create_clear_button()
         self.create_equals_button()
+        self.create_square_button()
+        self.create_sqrt_button()
 
     def create_display_labels(self):
         # Creates a total label and puts it on the display frame
@@ -126,10 +128,27 @@ class Calculator:
         self.update_total_label()
 
     def create_clear_button(self):
-        # Column span determines how many spaces in a row the button can take in a row
         button = tk.Button(self.button_frame, text="C", bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
                            borderwidth=0, command=self.clear)
-        button.grid(row=0, column=1, columnspan=3, sticky=tk.NSEW)
+        button.grid(row=0, column=1, sticky=tk.NSEW)
+
+    def square(self):
+        self.current_expression = str(eval(f"{self.current_expression}**2"))
+        self.update_label()
+
+    def create_square_button(self):
+        button = tk.Button(self.button_frame, text="x\u00b2", bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
+                           borderwidth=0, command=self.square)
+        button.grid(row=0, column=2, sticky=tk.NSEW)
+
+    def sqrt(self):
+        self.current_expression = str(eval(f"{self.current_expression}**0.5"))
+        self.update_label()
+
+    def create_sqrt_button(self):
+        button = tk.Button(self.button_frame, text="\u221ax", bg=OFF_WHITE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
+                           borderwidth=0, command=self.sqrt)
+        button.grid(row=0, column=3, sticky=tk.NSEW)
 
     def evaluate(self):
         # Adds current expression to the total expression
@@ -145,6 +164,7 @@ class Calculator:
         self.update_label()
 
     def create_equals_button(self):
+        # Column span determines how many spaces in a row the button can take in a row
         button = tk.Button(self.button_frame, text="=", bg=LIGHT_BLUE, fg=LABEL_COLOR, font=DEFAULT_FONT_STYLE,
                            borderwidth=0, command=self.evaluate)
         button.grid(row=4, column=3, columnspan=2, sticky=tk.NSEW)
